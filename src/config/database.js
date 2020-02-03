@@ -1,9 +1,9 @@
 module.exports = {
   dialect: 'postgres',
-  host: 'localhost', // se for docker toolbox não é localhost é 198xxxx
+  host: '192.168.99.100', // se for docker toolbox não é localhost é 198xxxx
   username: 'postgres',
   password: 'docker',
-  database: 'fastfee',
+  database: 'fastfeet',
   define: {
     timestamps: true,
     underscoder: true,
