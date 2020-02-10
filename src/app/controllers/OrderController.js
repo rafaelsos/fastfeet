@@ -1,12 +1,27 @@
 import Recipient from '../models/Recipient';
 import Deliveryman from '../models/Deliveryman';
 import Order from '../models/Order';
+import Mail from '../../lib/Mail';
 
 class OrderController {
   async store(req, res) {
     const { recipient_id, deliveryman_id, product } = await Order.create(
       req.body
     );
+
+    const deliveryman = await Deliveryman.findByPk(deliveryman_id);
+    const recipient = await Recipient.findByPk(recipient_id);
+
+    await Mail.sendMail({
+      to: `${deliveryman.name} <${deliveryman.email}>`,
+      subject: 'Novo Produto aguardando retirada',
+      template: 'insertorder',
+      context: {
+        deliveryman: deliveryman.name,
+        recipient: recipient.name,
+        address: `Rua ${recipient.street},${recipient.number} , ${recipient.city} , ${recipient.state}, ${recipient.zipcode}`,
+      },
+    });
 
     return res.json({
       recipient_id,
