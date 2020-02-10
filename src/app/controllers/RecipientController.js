@@ -7,6 +7,14 @@ class RecipientController {
     return res.json(recipient);
   }
 
+  async index(req, res) {
+    const recipients = await Recipient.findAll({
+      order: ['id'],
+    });
+
+    return res.json(recipients);
+  }
+
   async update(req, res) {
     // const recipient = await Recipient.findOne({ where: { id: req.params.id } });
     const recipient = await Recipient.findByPk(req.params.id);

@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
 import Deliveryman from '../models/Deliveryman';
+import File from '../models/File';
 
 class DeliverymanController {
   async store(req, res) {
@@ -35,7 +36,14 @@ class DeliverymanController {
     const { page = 1 } = req.query;
 
     const couriers = await Deliveryman.findAll({
-      attributes: ['id', 'name', 'email'],
+      attributes: ['id', 'name', 'email', 'avatar_id'],
+      include: [
+        {
+          model: File,
+          as: 'avatar',
+          attributes: ['name', 'path', 'url'],
+        },
+      ],
       order: ['name'],
       limit: 20,
       offset: (page - 1) * 20,
