@@ -1,7 +1,9 @@
 import Recipient from '../models/Recipient';
 import Deliveryman from '../models/Deliveryman';
 import Order from '../models/Order';
-import Mail from '../../lib/Mail';
+
+import InsertOrderMail from '../jobs/InsertOrderMail';
+import Queue from '../../lib/Queue';
 
 class OrderController {
   async store(req, res) {
@@ -12,15 +14,9 @@ class OrderController {
     const deliveryman = await Deliveryman.findByPk(deliveryman_id);
     const recipient = await Recipient.findByPk(recipient_id);
 
-    await Mail.sendMail({
-      to: `${deliveryman.name} <${deliveryman.email}>`,
-      subject: 'Novo Produto aguardando retirada',
-      template: 'insertorder',
-      context: {
-        deliveryman: deliveryman.name,
-        recipient: recipient.name,
-        address: `Rua ${recipient.street},${recipient.number} , ${recipient.city} , ${recipient.state}, ${recipient.zipcode}`,
-      },
+    await Queue.add(InsertOrderMail.key, {
+      deliveryman,
+      recipient,
     });
 
     return res.json({
