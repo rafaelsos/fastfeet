@@ -6,7 +6,7 @@ class InsertOrderMail {
   }
 
   async handle({ data }) {
-    const { deliveryman, recipient } = data;
+    const { deliveryman, recipient, product } = data;
 
     await Mail.sendMail({
       to: `${deliveryman.name} <${deliveryman.email}>`,
@@ -16,6 +16,7 @@ class InsertOrderMail {
         deliveryman: deliveryman.name,
         recipient: recipient.name,
         address: `Rua ${recipient.street},${recipient.number} , ${recipient.city} , ${recipient.state}, ${recipient.zipcode}`,
+        product,
       },
     });
   }
