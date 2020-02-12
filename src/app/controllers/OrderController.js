@@ -31,6 +31,7 @@ class OrderController {
     const orders = await Order.findAll({
       where: { canceled_at: null },
       attributes: ['id', 'product', 'start_date', 'end_date'],
+      order: ['id'],
       include: [
         {
           model: Recipient,
