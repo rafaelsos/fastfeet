@@ -1,12 +1,6 @@
-/*
-import isWithinInterval from 'date-fns/isWithinInterval';
-import getHours from 'date-fns/getHours';
-import getDate from 'date-fns/getDate';
-*/
-import { lightFormat, isWithinInterval } from 'date-fns';
+import { Op } from 'sequelize';
+import { lightFormat, isWithinInterval, startOfDay, endOfDay } from 'date-fns';
 import Order from '../models/Order';
-// import Deliveryman from '../models/Deliveryman';
-// import Recipient from '../models/Recipient';
 
 class StartOrderController {
   async update(req, res) {
@@ -20,6 +14,22 @@ class StartOrderController {
 
     if (!order) {
       return res.status(400).json({ error: 'Order does not exist' });
+    }
+
+    /**
+     * check if order has already been withdrawn
+     */
+    const checkStartOrder = await Order.findOne({
+      where: {
+        id,
+        start_date: { [Op.ne]: null },
+      },
+    });
+
+    if (checkStartOrder) {
+      return res
+        .status(400)
+        .json({ error: 'Order has already been withdrawn' });
     }
 
     /**
@@ -42,13 +52,32 @@ class StartOrderController {
     const dateformat = lightFormat(date, 'yyyy-MM-dd');
 
     const isInterval = isWithinInterval(date, {
-      start: new Date(`${dateformat} 01:00`),
-      end: new Date(`${dateformat} 18:00`),
+      start: new Date(`${dateformat} 00:00`),
+      end: new Date(`${dateformat} 23:59`),
     });
 
     if (!isInterval) {
       return res.status(400).json({
         warning: 'Orders can only be picked up between 08:00 and 18:00',
+      });
+    }
+
+    /**
+     * deliveryman can only make 5 withdrawals per day
+     */
+    const startorders = await Order.findAll({
+      where: {
+        deliveryman_id,
+        // start_date: { [Op.eq]: null },
+        start_date: {
+          [Op.between]: [startOfDay(date), endOfDay(date)],
+        },
+      },
+    });
+
+    if (startorders.length === 5) {
+      return res.status(400).json({
+        warning: 'Deliveryman can only make 5 withdrawals per day',
       });
     }
 

@@ -23,7 +23,7 @@ routes.post('/sessions', SessionController.store);
 
 // routes start and end order
 routes.put('/startorder/:id', StartOrderController.update);
-routes.put('/endorder/:id', EndOrderController.update);
+routes.put('/endorder/:id', upload.single('file'), EndOrderController.update);
 
 // View deliverer orders
 routes.get('/deliveryman/:deliveryman_id', ViewOrderController.index);

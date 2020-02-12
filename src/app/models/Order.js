@@ -26,6 +26,10 @@ class Order extends Model {
       foreignKey: 'deliveryman_id',
       as: 'deliveryman',
     });
+    this.belongsTo(models.Signature, {
+      foreignKey: 'signature_id',
+      as: 'signature',
+    });
   }
 }
 

@@ -1,9 +1,21 @@
+import { Op } from 'sequelize';
 import Order from '../models/Order';
+import Signature from '../models/Signature';
 
 class EndOrderController {
   async update(req, res) {
     const { id } = req.params;
-    const { deliveryman_id } = req.body;
+    const { deliveryman_id } = req.query;
+
+    /**
+     * devo validar se tem signature?
+     */
+    const { originalname: name, filename: path } = req.file;
+
+    const signature = await Signature.create({
+      name,
+      path,
+    });
 
     /**
      * verify exist order
@@ -12,6 +24,24 @@ class EndOrderController {
 
     if (!order) {
       return res.status(400).json({ error: 'Order does not exist' });
+    }
+
+    // CHECAR SE PRODUTO FOI RETIRADO , SE NAO FOI NAO DEIXA ENTREGAR
+
+    /**
+     * check if the order has already been delivered
+     */
+    const checkEndtOrder = await Order.findOne({
+      where: {
+        id,
+        end_date: { [Op.ne]: null },
+      },
+    });
+
+    if (checkEndtOrder) {
+      return res
+        .status(400)
+        .json({ error: 'Order has already been delivered' });
     }
 
     /**
@@ -30,6 +60,7 @@ class EndOrderController {
     const { product, recipient_id, start_date, end_date } = await order.update({
       ...order,
       end_date: new Date(),
+      signature_id: signature.id,
     });
 
     return res.json({
