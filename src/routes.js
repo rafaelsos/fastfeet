@@ -12,6 +12,8 @@ import StartOrderController from './app/controllers/StartOrderController';
 import EndOrderController from './app/controllers/EndOrderController';
 import ViewOrderController from './app/controllers/ViewOrdersController';
 import DeliverysController from './app/controllers/DeliverysController';
+import DeliveryProblemsController from './app/controllers/DeliveryProblemsController';
+import DeliveryProblemsIdController from './app/controllers/DeliveryProblemsIdController';
 
 import authMiddleware from './app/middlewares/auth';
 
@@ -28,6 +30,17 @@ routes.put('/endorder/:id', upload.single('file'), EndOrderController.update);
 // View deliverer orders
 routes.get('/deliveryman/:deliveryman_id', ViewOrderController.index);
 routes.get('/deliveryman/:deliveryman_id/deliverys', DeliverysController.index);
+
+// delivery_problems
+routes.get('/delivery/problems', DeliveryProblemsController.index);
+routes.get(
+  '/delivery/:delivery_id/problems',
+  DeliveryProblemsIdController.index
+);
+routes.post(
+  '/delivery/:delivery_id/problems',
+  DeliveryProblemsIdController.index
+);
 
 // middleware auth
 routes.use(authMiddleware);
