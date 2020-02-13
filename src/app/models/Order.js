@@ -8,6 +8,7 @@ class Order extends Model {
         canceled_at: Sequelize.DATE,
         start_date: Sequelize.DATE,
         end_date: Sequelize.DATE,
+        delivery_id: Sequelize.VIRTUAL,
       },
       {
         sequelize,
@@ -29,6 +30,11 @@ class Order extends Model {
     this.belongsTo(models.Signature, {
       foreignKey: 'signature_id',
       as: 'signature',
+    });
+
+    this.hasMany(models.DeliveryProblems, {
+      foreignKey: 'delivery_id',
+      as: 'deliveryProblems',
     });
   }
 }

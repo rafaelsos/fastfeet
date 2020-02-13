@@ -9,7 +9,11 @@ class DeliveryProblemsIdController {
     /**
      * verify exist order
      */
-    const order = await Order.findByPk(delivery_id);
+    const order = await Order.findOne({
+      where: {
+        id: delivery_id,
+      },
+    });
 
     if (!order) {
       return res.status(400).json({ error: 'Order does not exist' });
@@ -19,30 +23,60 @@ class DeliveryProblemsIdController {
      * check if the delivery id is from that order
      */
     const checkDeliveryman = await Order.findOne({
-      where: { delivery_id, deliveryman_id },
+      where: {
+        id: delivery_id,
+        deliveryman_id,
+      },
     });
 
     if (!checkDeliveryman) {
       return res
         .status(400)
-        .json({ error: 'Delivery person cannot pick up order' });
+        .json({ error: 'delivery person cannot pick up order' });
     }
 
-    const deliveryProblem = await DeliveryProblems.create({
+    const delivery = await DeliveryProblems.create({
       delivery_id,
       description,
     });
 
-    return res.json(deliveryProblem);
+    return res.json(delivery);
   }
 
   async index(req, res) {
     const { delivery_id } = req.params;
 
-    const deliveryProblems = await DeliveryProblems.findAll({
-      where: delivery_id,
+    const orders = await Order.findAll({
+      attributes: ['id', 'product', 'start_date', 'end_date'],
+      include: [
+        {
+          model: DeliveryProblems,
+          as: 'deliveryProblems',
+          where: { delivery_id },
+          attributes: ['id', 'description'],
+          required: true,
+        },
+      ],
     });
-    return res.json(deliveryProblems);
+    return res.json(orders);
+  }
+
+  async delete(req, res) {
+    const { id } = req.params;
+    const order = await Order.findOne({
+      include: [
+        {
+          model: DeliveryProblems,
+          as: 'deliveryProblems',
+          where: { id },
+          required: true,
+        },
+      ],
+    });
+
+    order.destroy();
+
+    return res.json({ message: 'Order successfully deleted' });
   }
 }
 

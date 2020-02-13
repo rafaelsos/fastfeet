@@ -31,15 +31,14 @@ routes.put('/endorder/:id', upload.single('file'), EndOrderController.update);
 routes.get('/deliveryman/:deliveryman_id', ViewOrderController.index);
 routes.get('/deliveryman/:deliveryman_id/deliverys', DeliverysController.index);
 
-// delivery_problems
-routes.get('/delivery/problems', DeliveryProblemsController.index);
+// create and list deliverys Id
 routes.get(
   '/delivery/:delivery_id/problems',
   DeliveryProblemsIdController.index
 );
 routes.post(
   '/delivery/:delivery_id/problems',
-  DeliveryProblemsIdController.index
+  DeliveryProblemsIdController.store
 );
 
 // middleware auth
@@ -63,6 +62,15 @@ routes.get('/orders', OrderController.index);
 routes.post('/orders', OrderController.store);
 routes.put('/orders/:id', OrderController.update);
 routes.delete('/orders/:id', OrderController.delete);
+
+// list all deliveries with a problem
+routes.get('/delivery/problems', DeliveryProblemsController.index);
+
+// delete a delivery based on the problem ID
+routes.delete(
+  '/problem/:id/cancel-delivery',
+  DeliveryProblemsIdController.delete
+);
 
 routes.post('/files', upload.single('file'), FileController.store);
 
