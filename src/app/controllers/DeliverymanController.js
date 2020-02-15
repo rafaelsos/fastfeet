@@ -88,13 +88,21 @@ class DeliverymanController {
   }
 
   async delete(req, res) {
+    const schema = Yup.object().shape({
+      id: Yup.number().required(),
+    });
+
+    if (!(await schema.isValid(req.params))) {
+      return res.status(400).json({ error: 'Validation fails' });
+    }
+
     const deliveryman = await Deliveryman.findByPk(req.params.id);
 
     if (!deliveryman) {
       return res.status(400).json({ error: 'Delivery man does not exists' });
     }
 
-    await deliveryman.destroy();
+    // await deliveryman.destroy();
 
     return res
       .status(200)

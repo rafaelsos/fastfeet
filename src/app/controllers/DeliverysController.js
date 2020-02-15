@@ -1,3 +1,4 @@
+import * as Yup from 'yup';
 import { Op } from 'sequelize';
 import Order from '../models/Order';
 import Recipient from '../models/Recipient';
@@ -6,6 +7,14 @@ import Signature from '../models/Signature';
 
 class DeliverysController {
   async index(req, res) {
+    const schema = Yup.object().shape({
+      deliveryman_id: Yup.number().required(),
+    });
+
+    if (!(await schema.isValid(req.params))) {
+      return res.status(400).json({ error: 'Validation fails' });
+    }
+
     const { deliveryman_id } = req.params;
 
     const orders = await Order.findAll({

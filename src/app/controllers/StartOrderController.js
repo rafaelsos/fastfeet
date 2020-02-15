@@ -1,9 +1,17 @@
 import { Op } from 'sequelize';
 import { lightFormat, isWithinInterval, startOfDay, endOfDay } from 'date-fns';
+import * as Yup from 'yup';
 import Order from '../models/Order';
 
 class StartOrderController {
   async update(req, res) {
+    const schema = Yup.object().shape({
+      deliveryman_id: Yup.number().required(),
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'Validation fails' });
+    }
     const { id } = req.params;
     const { deliveryman_id } = req.body;
 
@@ -19,6 +27,7 @@ class StartOrderController {
     /**
      * check if order has already been withdrawn
      */
+
     const checkStartOrder = await Order.findOne({
       where: {
         id,
