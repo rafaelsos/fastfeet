@@ -1,7 +1,11 @@
 import React from 'react';
 
-// import { Container } from './styles';
+import { Container } from './styles';
 
 export default function SignIn() {
-  return <div />;
+  return (
+    <Container>
+      <h1>SignIn</h1>
+    </Container>
+  );
 }
