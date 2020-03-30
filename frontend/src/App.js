@@ -15,12 +15,10 @@ import GlobalStyles from './styles/global';
 import Header from '~/components/Header';
 
 function App() {
-  const signed = false;
-
   return (
     <Provider store={store}>
       <Router history={history}>
-        {signed ? <Header /> : null}
+        <Header />
         <Routes />
         <GlobalStyles />
       </Router>

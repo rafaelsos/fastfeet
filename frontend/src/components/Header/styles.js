@@ -7,12 +7,11 @@ export const Container = styled.div`
 `;
 
 export const Content = styled.div`
-  height: 64px;
-  max-width: 1300px;
-  margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 64px;
+  margin: 0 auto;
 
   nav {
     display: flex;

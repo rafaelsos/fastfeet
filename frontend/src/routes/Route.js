@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Route, Redirect } from 'react-router-dom';
 
@@ -7,7 +8,10 @@ export default function RouteWrapper({
   isPrivate,
   ...rest
 }) {
-  const signed = false;
+  // const { signed } = store.getState().auth;
+  const stateAtual = useSelector((state) => state.user.length);
+
+  const signed = stateAtual === 1;
 
   if (!signed && isPrivate) {
     return <Redirect to="/" />;
