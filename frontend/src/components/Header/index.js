@@ -16,7 +16,7 @@ export default function Header() {
             </Link>
           </Logo>
           <Menu>
-            <Link to="/">ENCOMENDAS</Link>
+            <Link to="/orderlist">ENCOMENDAS</Link>
             <Link to="/">ENTREGADORES</Link>
             <Link to="/">DESTINATÁRIOS</Link>
             <Link to="/">PROBLEMAS</Link>
