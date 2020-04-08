@@ -1,5 +1,4 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { Container, Content, Menu, Logo } from './styles';
@@ -7,9 +6,6 @@ import { Container, Content, Menu, Logo } from './styles';
 import logo from '~/assets/fastfeet-logo.png';
 
 export default function Header() {
-  const email = useSelector((state) => state.user);
-  console.tron.log(email);
-
   return (
     <Container>
       <Content>
@@ -28,7 +24,7 @@ export default function Header() {
         </nav>
 
         <aside>
-          <strong>{email}</strong>
+          <strong>Nome do admin</strong>
           <Link to="/">Sair do sistema</Link> {/* colocar um icone de logout */}
         </aside>
       </Content>

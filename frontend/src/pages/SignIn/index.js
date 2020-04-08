@@ -1,5 +1,4 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
 import { Form, Input } from '@rocketseat/unform';
 import * as Yup from 'yup';
 
@@ -15,15 +14,7 @@ const schema = Yup.object().shape({
 });
 
 export default function SignIn() {
-  const dispacth = useDispatch();
-
-  function handleSubmit(data) {
-    dispacth({
-      type: 'SIGN_IN',
-      email: data.email,
-      password: data.password,
-    });
-  }
+  function handleSubmit() { }
 
   return (
     <Container>
