@@ -1,9 +1,22 @@
-export default function user(state = [], action) {
-  switch (action.type) {
-    case 'SIGN_IN':
-      return [...state, action.email];
+import produce from 'immer';
 
-    default:
-      return state;
-  }
+const INITIAL_STATE = {
+  profile: null,
+};
+
+export default function user(state = INITIAL_STATE, action) {
+  return produce(state, (draft) => {
+    switch (action.type) {
+      case '@auth/SIGN_IN_SUCCESS': {
+        console.tron.error(action.payload.user);
+        draft.profile = action.payload.user;
+        break;
+      }
+      case '@auth/SIGN_OUT': {
+        draft.profile = null;
+        break;
+      }
+      default:
+    }
+  });
 }

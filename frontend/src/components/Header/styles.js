@@ -39,26 +39,19 @@ export const Content = styled.div`
 
   aside {
     display: flex;
-    flex-wrap: wrap;
     flex-direction: row;
-    justify-content: center;
+
     align-items: center;
 
-    a {
-      margin-top: 10px;
-      color: #de3b3b;
-      font-weight: bold;
+    strong {
+      font-size: 16px;
+      color: #666666;
+      padding: 15px;
     }
 
-    @media all and (max-width: 600px) {
-      font-size: 1px;
-      justify-content: flex-end;
-      align-items: flex-end;
-    }
-    @media all and (max-width: 500px) {
-      font-size: 12px;
-      justify-content: flex-end;
-      align-items: flex-end;
+    button {
+      border: 0;
+      background: #fff;
     }
   }
 `;
